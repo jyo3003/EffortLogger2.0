@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/10.16.3/sweetalert2.min.css" integrity="sha512-Hg/33ztzJ2DxKPWXOMjmkDRbkkTUgOoWQSZa9c9mdyCY90tO1r3qjFgsxrkLhT92TgzYbY+bW8rsX9SWzd0iFg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/10.16.3/sweetalert2.min.js" integrity="sha512-nTptfJY8iWlASlXmFujyGzJnK8eCmz55xJn2ZGX+B5F5rhHsxodJrc9uyA0UgV6Mf8kUzjtbBLxwGquz4Y4A4A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+   
+
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap');
+      
+        body {
+			background-color: #f0f0f0;
+			font-family: Arial, sans-serif;
+		}
+		
+		.container {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			margin-top: 50px;
+		}
+
+		.timer {
+			font-size: 50px;
+			color: #333;
+			margin-bottom: 30px;
+		}
+
+		.button {
+			background-color: #008CBA;
+			color: white;
+			border: none;
+			padding: 10px 20px;
+			text-align: center;
+			text-decoration: none;
+			font-size: 20px;
+			cursor: pointer;
+			border-radius: 5px;
+			box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+			transition: all 0.2s ease-in-out;
+            float: right;
+             margin-left: 600px; /* added */
+             margin-top: -100px;
+		}
+
+		.button:hover {
+			background-color: #4CAF50;
+			box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+		}
+
+		.active {
+			background-color: #4CAF50;
+		}
+      
+      h1, h2 {
+        text-align: center;
+      }
+      
+      form {
+        margin: 20px auto;
+        width: 60%;
+        border: 2px solid #ccc;
+        padding: 20px;
+        border-radius: 10px;
+        background-color: #f2f2f2;
+      }
+      
+      label {
+        display: block;
+        margin-bottom: 10px;
+      }
+      
+      input[type="text"], select, textarea {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        box-sizing: border-box;
+        border: 2px solid #ccc;
+        border-radius: 4px;
+        resize: vertical;
+      }
+      
+      input[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      
+      input[type="submit"]:hover {
+        background-color: #45a049;
+      }
+
+      table {
+        border-collapse: collapse;
+        margin-left: auto;
+        margin-right: auto;
+        width: 70%;
+      }
+      th, td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+      th {
+        background-color: #008CBA;
+        color: white;
+      }
+
+      *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Montserrat',sans-serif;
+        }
+        nav{
+        background: #151515;
+        padding: 5px 40px;
+        }
+        nav ul{
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        }
+        nav ul li{
+        padding: 15px 0;
+        cursor: pointer;
+        }
+        nav ul li.items{
+        position: relative;
+        width: auto;
+        margin: 0 16px;
+        text-align: center;
+        order: 3;
+        }
+        nav ul li.items:after{
+        position: absolute;
+        content: '';
+        left: 0;
+        bottom: 5px;
+        height: 2px;
+        width: 100%;
+        background: #33ffff;
+        opacity: 0;
+        transition: all 0.2s linear;
+        }
+        nav ul li.items:hover:after{
+        opacity: 1;
+        bottom: 8px;
+        }
+        nav ul li.logo{
+        flex: 1;
+        color: white;
+        font-size: 23px;
+        font-weight: 600;
+        cursor: default;
+        user-select: none;
+        }
+        nav ul li a{
+        color: white;
+        font-size: 18px;
+        text-decoration: none;
+        transition: .4s;
+        }
+        nav ul li:hover a{
+        color: cyan;
+        }
+        nav ul li i{
+        font-size: 23px;
+        }
+        nav ul li.btn{
+        display: none;
+        }
+        nav ul li.btn.hide i:before{
+        content: '\f00d';
+        }
+        @media all and (max-width: 900px){
+        nav{
+            padding: 5px 30px;
+        }
+        nav ul li.items{
+            width: 100%;
+            display: none;
+        }
+        nav ul li.items.show{
+            display: block;
+        }
+        nav ul li.btn{
+            display: block;
+        }
+        nav ul li.items:hover{
+            border-radius: 5px;
+            box-shadow: inset 0 0 5px #33ffff,
+                        inset 0 0 10px #66ffff;
+        }
+        nav ul li.items:hover:after{
+            opacity: 0;
+        }
+        
+        }
+    </style>
+  </head>
+  <body>
+    
+    <!-- create navigation bar ( header) -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <ul>
+           <li class="logo">EffortLogger</li>
+           <li class="items"><a href="/managerPage" th:href="@{/managerPage}">Manager Dashboard</a></li>
+            <li class="items"><a href="#">View/Download Reports</a></li>
+            <li class="items"><a href="/logout" th:href="@{/logout}">Logout</a></li>
+           <li class="btn"><a href="#"><i class="fas fa-bars"></i></a></li>
+        </ul>
+     </nav>
+      <script>
+        $(document).ready(function(){
+          $('.btn').click(function(){
+            $('.items').toggleClass("show");
+            $('ul li').toggleClass("hide");
+          });
+        });
+     </script>
+  
+      <br><br><br><br><br> 
+      <div class="container" style="display: flex; justify-content: space-between;">
+		<h1>Log your efforts here!</h1>
+		<div class="timer">00:00:00</div>
+		<button class="button" onclick="toggleTimer()">Start</button>
+		</div>
+
+	<script>
+		var startTime, elapsedTime = 0;
+		var timerInterval;
+
+		function startTimer() {
+			startTime = Date.now() - elapsedTime;
+			timerInterval = setInterval(updateTimer, 1000);
+		}
+
+		function stopTimer() {
+		    clearInterval(timerInterval);
+		    timerInterval = null;
+		    
+		    // Make AJAX request to backend
+		    $.ajax({
+		        url: '/createTask/stop',
+		        method: 'POST',
+		        data: {elapsedTime: elapsedTime},
+		        success: function(response) {
+		            // Handle successful response from backend
+		        },
+		        error: function(error) {
+		            // Handle error from backend
+		        }
+		    });
+		}
+
+		function updateTimer() {
+			elapsedTime = Date.now() - startTime;
+			var time = new Date(elapsedTime);
+			var hours = time.getUTCHours().toString().padStart(2, '0');
+			var minutes = time.getUTCMinutes().toString().padStart(2, '0');
+			var seconds = time.getUTCSeconds().toString().padStart(2, '0');
+			document.querySelector('.timer').textContent = hours + ':' + minutes + ':' + seconds;
+		}
+
+		function toggleTimer() {
+			var button = document.querySelector('.button');
+			if (timerInterval) {
+				stopTimer();
+				button.textContent = 'Start';
+				button.classList.remove('active');
+			} else {
+				startTimer();
+				button.textContent = 'Stop';
+				button.classList.add('active');
+			}
+		}
+	</script>
+
+<br><br>
+
+	
+			    <h2>Create a Task</h2>
+			    <!-- success message -->
+                <div th:if="${param.success}">
+                    <div class="alert alert-info">You've successfully created a new Task</div>
+                </div>
+			    <form th:action="@{/createTask}" method="post" th:object="${user}">
+			     
+			      <label for="task_name">Task Name:</label>
+			      <input type="text" id="task_name" name="task_name" required>
+			      <label for="task_description">Task Description:</label>
+			      <textarea id="task_description" name="task_description" required></textarea>
+			      
+			      <label for="due_date">Due Date:</label>
+			      <textarea id="due_date" name="due_date" required></textarea>
+			      
+			      
+			      <label for="task_priority">Task Priority:</label>
+			      <select id="task_priority" name="task_priority" required>
+			      
+			      
+			        <option value="">--Select Priority--</option>
+			        <option value="High">High</option>
+			        <option value="Medium">Medium</option>
+			        <option value="Low">Low</option>
+			      </select>
+			      <label for="assigned_to">Assigned To:</label>
+			      <select id="assigned_to" name="assigned_to" required>
+			        <option value="">--Select Team Member--</option>
+			        <option value="Prashanth">Prashanth Dussa</option>
+			        <option value="Mohana Deepthi">Mohana Deepthi</option>
+			        <option value="Vaishnavi">Vaishnavi</option>
+			        <option value="Rohith">Rohith</option>
+			      </select>
+			      <input type="submit" value="Create Task" onclick="showSuccessMessage()">
+			    </form>
+			    
+			    <script>
+				function showSuccessMessage() {
+				  Swal.fire({
+				    icon: 'success',
+				    title: 'Task Created Successfully!',
+				    showConfirmButton: false,
+				    timer: 1500
+				  });
+				}
+				</script>
+   
+</body>
+</html>
