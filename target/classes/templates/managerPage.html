@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    
+<link rel="stylesheet" 
+ href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+</head>
+<title>Task Management</title>
+<style>
+
+.container1 {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			margin-top: 50px;
+		}
+
+		.timer {
+			font-size: 50px;
+			color: #333;
+			margin-bottom: 30px;
+		}
+
+		.button {
+			background-color: #008CBA;
+			color: white;
+			border: none;
+			padding: 10px 20px;
+			text-align: center;
+			text-decoration: none;
+			font-size: 20px;
+			cursor: pointer;
+			border-radius: 5px;
+			box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+			transition: all 0.2s ease-in-out;
+            float: right;
+             margin-left: 600px; /* added */
+             margin-top: -100px;
+		}
+
+		.button:hover {
+			background-color: #4CAF50;
+			box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+		}
+
+		.active {
+			background-color: #4CAF50;
+		}
+    *{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Montserrat',sans-serif;
+}
+nav{
+  background: #151515;
+  padding: 5px 40px;
+}
+nav ul{
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+nav ul li{
+  padding: 15px 0;
+  cursor: pointer;
+}
+nav ul li.items{
+  position: relative;
+  width: auto;
+  margin: 0 16px;
+  text-align: center;
+  order: 3;
+}
+nav ul li.items:after{
+  position: absolute;
+  content: '';
+  left: 0;
+  bottom: 5px;
+  height: 2px;
+  width: 100%;
+  background: #33ffff;
+  opacity: 0;
+  transition: all 0.2s linear;
+}
+nav ul li.items:hover:after{
+  opacity: 1;
+  bottom: 8px;
+}
+nav ul li.logo{
+  flex: 1;
+  color: white;
+  font-size: 23px;
+  font-weight: 600;
+  cursor: default;
+  user-select: none;
+}
+nav ul li a{
+  color: white;
+  font-size: 18px;
+  text-decoration: none;
+  transition: .4s;
+}
+nav ul li:hover a{
+  color: cyan;
+}
+nav ul li i{
+  font-size: 23px;
+}
+nav ul li.btn{
+  display: none;
+}
+nav ul li.btn.hide i:before{
+  content: '\f00d';
+}
+@media all and (max-width: 900px){
+  nav{
+    padding: 5px 30px;
+  }
+  nav ul li.items{
+    width: 100%;
+    display: none;
+  }
+  nav ul li.items.show{
+    display: block;
+  }
+  nav ul li.btn{
+    display: block;
+  }
+  nav ul li.items:hover{
+    border-radius: 5px;
+    box-shadow: inset 0 0 5px #33ffff,
+                inset 0 0 10px #66ffff;
+  }
+  nav ul li.items:hover:after{
+    opacity: 0;
+  }
+}
+
+
+body {
+			font-family: Arial, sans-serif;
+			margin: 0;
+			padding: 0;
+		}
+		
+		.container {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			align-items: center;
+			height: 70vh;
+			background-color: #f3f3f3;
+		}
+		
+		.box {
+			width: 300px;
+			height: 200px;
+			margin: 20px;
+			padding: 20px;
+			border-radius: 10px;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			color: #fff;
+			font-size: 20px;
+			text-align: center;
+			text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+			transition: transform 0.2s ease-in-out;
+		}
+		
+		.box:hover {
+			transform: scale(1.05);
+			cursor: pointer;
+		}
+		
+		.create {
+			background-color: #4CAF50;
+		}
+		
+		.edit {
+			background-color: #2196F3;
+		}
+		
+		.delete {
+			background-color: #f44336;
+		}
+		
+		h1 {
+			margin-top: 0;
+		}
+		
+		img {
+			max-width: 100%;
+			max-height: 100%;
+			object-fit: contain;
+			margin-bottom: 10px;
+        }
+   
+</style>
+
+<body>
+
+    
+    <!-- create navigation bar ( header) -->
+   <nav class="navbar navbar-inverse navbar-fixed-top">
+        <ul>
+           <li class="logo">EffortLogger</li>
+           <li class="items"><a href="#">Home</a></li>
+            <li class="items"><a href="#">View/Download Reports</a></li>
+            <li class="items"><a href="/logout" th:href="@{/logout}">Logout</a></li>
+           <li class="btn"><a href="#"><i class="fas fa-bars"></i></a></li>
+        </ul>
+     </nav>
+     <script>
+        $(document).ready(function(){
+          $('.btn').click(function(){
+            $('.items').toggleClass("show");
+            $('ul li').toggleClass("hide");
+          });
+        });
+     </script>
+  
+      <br><br>
+      <div class="container1" style="display: flex; justify-content: space-between;">
+		<h1>Log your efforts here!</h1>
+		<div class="timer">00:00:00</div>
+		<button class="button" onclick="toggleTimer()">Start</button>
+		</div>
+
+	<script>
+		var startTime, elapsedTime = 0;
+		var timerInterval;
+
+		function startTimer() {
+			startTime = Date.now() - elapsedTime;
+			timerInterval = setInterval(updateTimer, 1000);
+		}
+
+		function stopTimer() {
+			clearInterval(timerInterval);
+			timerInterval = null;
+		}
+
+		function updateTimer() {
+			elapsedTime = Date.now() - startTime;
+			var time = new Date(elapsedTime);
+			var hours = time.getUTCHours().toString().padStart(2, '0');
+			var minutes = time.getUTCMinutes().toString().padStart(2, '0');
+			var seconds = time.getUTCSeconds().toString().padStart(2, '0');
+			document.querySelector('.timer').textContent = hours + ':' + minutes + ':' + seconds;
+		}
+
+		function toggleTimer() {
+			var button = document.querySelector('.button');
+			if (timerInterval) {
+				stopTimer();
+				button.textContent = 'Start';
+				button.classList.remove('active');
+			} else {
+				startTimer();
+				button.textContent = 'Stop';
+				button.classList.add('active');
+			}
+		}
+	</script>
+
+    <br>
+
+	<div class="container">
+		<div class="box create">
+			<img src="https://dummyimage.com/200x200/4CAF50/ffffff.png&text=Create" alt="Create">
+			<h1>Create a Task</h1>
+            
+            <br><br><br><br><br>
+			<div class="form-group">
+                <span>Click here to create a new task.<a href="/" th:href="@{/createTask}">Create</a></span>
+            </div>
+		</div>
+		<div class="box edit">
+			<img src="https://dummyimage.com/200x200/2196F3/ffffff.png&text=Edit" alt="Edit">
+			<h1>Edit a Task</h1>
+            
+            <br><br><br><br><br>
+			<div class="form-group">
+                <span>Click here to edit an existing task.<a href="/" th:href="@{/editTask}">Edit</a></span>
+            </div>
+		</div>
+		<div class="box delete">
+			<img src="https://dummyimage.com/200x200/f44336/ffffff.png&text=Delete" alt="Delete">
+			<h1>Delete a Task</h1>
+            
+            <br><br><br><br><br>
+            <div class="form-group">
+                <span>Click here to delete an existing task.<a href="/" th:href="@{/deleteTask}">Delete</a></span>
+            </div>
+			
+		</div>
+	</div>
+</body>
+</html>
